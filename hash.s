@@ -1,6 +1,6 @@
 .include	"config.s"
 
-.globl	hash_table
+.globl	hash_table2
 
 
 
@@ -13,7 +13,7 @@
 .align 2
 .endif	
 
-hash_table:
+hash_table2:
 .rept HASHENTRIES
 .space ELEMENTLEN, 0
 .endr	
@@ -40,8 +40,12 @@ hash_h1:
 	FRAME	1
 	PUSH	ra, 0
 	li	a1, HASHENTRIES		# Divisor for divremu
+.if HAS_M
+	rem	a0, a0, a1
+.else
 	jal	divremu			# a0=quotient, a1=remainder
 	mv	a0, a1			# Return remainder in a0
+.endif
 	POP	ra, 0
 	EFRAME	1
 	ret
@@ -63,8 +67,13 @@ hash_h2:
 	FRAME	1
 	PUSH	ra, 0
 	li	a1, HASHENTRIES-1	# Divisor for divremu
+.if HAS_M
+	rem	a0, a0, a1
+	addi	a0, a0, 1
+.else
 	jal	divremu		        # a0=quotient, a1=remainder (logical step is 0 to HASHEN
 	addi	a0, a1, 1		# Logical step is 1 to HASHENTRIES-1
+.endif
 	POP	ra, 0
 	EFRAME	1
 	ret

@@ -1,6 +1,6 @@
 .equ	CPU_BITS,	32
 .equ	CPU_BYTES,	CPU_BITS/8
-.equ	HAS_ZBB,	0
+.equ	HAS_M,	0
 	
 
 .macro PUSH reg_to_save, offset_val
